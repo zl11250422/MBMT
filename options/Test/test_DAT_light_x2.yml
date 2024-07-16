@@ -1,0 +1,94 @@
+# general settings
+name: test_DAT_light_x2
+model_type: DATModel
+scale: 2
+num_gpu: 1
+manual_seed: 10
+
+datasets:
+  test_1:  # the 1st test dataset
+    task: SR
+    name: Set5
+    type: PairedImageDataset
+    dataroot_gt: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Set5\GTmod4
+    dataroot_lq: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Set5\LRbicx2
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+  test_2:  # the 2st test dataset
+    task: SR
+    name: Set14
+    type: PairedImageDataset
+    dataroot_gt: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Set14\GTmod4
+    dataroot_lq: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Set14\LRbicx2
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+  test_3:  # the 3st test dataset
+    task: SR
+    name: B100
+    type: PairedImageDataset
+    dataroot_gt: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\BSD100\GTmod4
+    dataroot_lq: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\BSD100\LRbicx2
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+  test_4:  # the 4st test dataset
+    task: SR
+    name: Urban100
+    type: PairedImageDataset
+    dataroot_gt: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Urban100\GTmod4
+    dataroot_lq: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Urban100\LRbicx2
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+  test_5:  # the 5st test dataset
+    task: SR
+    name: Manga109
+    type: PairedImageDataset
+    dataroot_gt: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Manga109\GTmod4
+    dataroot_lq: C:\Users\lzhan\Desktop\sisr\SISR\BSRN\BSRN\datasets\Manga109\LRbicx2
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+
+# network structures
+network_g:
+  type: DAT
+  upscale: 2
+  in_chans: 3
+  img_size: 64
+  img_range: 1.
+  depth: [8]
+  embed_dim: 60
+  num_heads: [6]
+  expansion_factor: 2
+  resi_connection: '3conv'
+  split_size: [8,32]
+  upsampler: 'pixelshuffledirect'
+
+# path
+path:
+  pretrain_network_g: H:\down\SISR\mbmt\experiments\train_DAT_light_x2\models\net_g_1607000.pth
+  strict_load_g: True
+
+# validation settings
+val:
+  save_img: True
+  suffix: ~  # add suffix to saved images, if None, use exp name
+  use_chop: False  # True to save memory, if img too large
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 2
+      test_y_channel: True
+    ssim:
+      type: calculate_ssim
+      crop_border: 2
+      test_y_channel: True
